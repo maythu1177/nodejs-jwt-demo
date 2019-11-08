@@ -24,6 +24,7 @@ const login = (email,password) =>{
 }
 
 const addVendor = (vendorName) =>{
+    console.log("vendor query",vendorName)
     query = util.promisify(mypool.query).bind(mypool)
     return query(`INSERT INTO vendor (vendorName) VALUES (?)`,[vendorName])
     mypool.end()

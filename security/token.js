@@ -5,11 +5,14 @@ const publicKey = fs.readFileSync('security/public.pem');
 
 //@maythu
 const produceToken = (payload) => {
-    return jwt.sign(payload, privateKey, { algorithm: 'RS256', expiresIn: "1d" });
+    return jwt.sign(payload, privateKey, { algorithm: 'RS256', expiresIn: "20m" });
 }
 
-const verifyToken = token => {
-    return jwt.verify(token,publicKey)
+const verifyToken = (token, callback) => {
+    jwt.verify(token, publicKey, (err, res) => {
+        if (err) callback(err, null)
+        else callback(null, res)
+    })
 }
 module.exports.produceToken = produceToken;
 module.exports.verifyToken = verifyToken;                                  

@@ -19,6 +19,10 @@ const login = (req, res) => {
     const password = req.body.password
 
     authService.login(email, password).then(data => {
+      //  console.log("data", data)
+        if (data.length == 0) {
+            res.json(response({ success: false, message: "email and password not match" }))
+        }
         res.json(response({ success: true, payload: data }))
     }).catch(err => {
         res.json(response({ success: false, message: err }))

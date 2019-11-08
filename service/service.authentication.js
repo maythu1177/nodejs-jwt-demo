@@ -11,33 +11,25 @@ const register = (username, email, password) => {
 
 const login = (email, password) => {
     return demodb.login(email, password).then(res => {
-        if (res.length) {
-            console.log("res", res)
-            bcrypt.compare(password, res[0].password, function (err, result) {
-                console.log(result, "ur result")
-                if (result == true) {
-                    console.log("enterbcrypt")
-                    const payload = {
-                        payload: res[0].username,
-                        email: res[0].email,
-                    }
-                    const token = produceToken(payload);
-                    const data = {
-                        token: token,
-                        username: res[0].username
-                    }
-                    console.log(data,"ddddddddddddddddd")
-                    return data
-                }
-                else {
-                    console.log(err, "bcrypt error")
-                }
-            });
+        if (res.length && bcrypt.compareSync(password, res[0].password)) {
+
+            const payload = {
+                name: res[0].username,
+                email: res[0].email,
+            }
+            const token = produceToken(payload);
+            const data = {
+                token: token,
+                username: res[0].username
+            }
+            return data
         }
         else {
             return []
         }
-    }).catch(err => err)
+    }).catch(err =>{
+        console.log(err)
+    } )
 }
 
 

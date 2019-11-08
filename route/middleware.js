@@ -11,12 +11,18 @@ const authMiddleware = (req,res,next) =>{
    else if(! authorization.split(" ")[1]){
     return res.json(authFail) 
    }
+  
    else {
-      return verifyToken(`${authorization.split(" ")[1] }`).then(res =>{
-         console.log(res)
-         next()
-      }).catch(err=>err)
-   }
+      return verifyToken(`${authorization.split(" ")[1]}`, (error, data) => {
+          if(error) {
+              return res.json(response({success:false,message:error.message}))
+          }
+          else {
+               console.log(" data1234 ", data)
+              next()
+          }
+      })
+  }
 }
 
 module.exports = authMiddleware
